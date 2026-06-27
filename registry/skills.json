@@ -1,5 +1,37 @@
 {
   "version": 1,
+  "detection_order": ["cursor", "claude-code", "codex"],
+  "agents": {
+    "cursor": {
+      "label": "Cursor",
+      "skill_dir": ".cursor/skills",
+      "skill_dir_alt": ".agents/skills",
+      "detect": {
+        "env_any": ["CURSOR_TRACE_ID", "CURSOR_AGENT", "CURSOR_SESSION_ID"],
+        "env_path_contains": ["cursor", "Cursor"],
+        "process_names": ["Cursor.exe", "Cursor"],
+        "project_markers": [".cursor/skills", ".cursor/rules", ".cursor/hooks"]
+      }
+    },
+    "claude-code": {
+      "label": "Claude Code",
+      "skill_dir": ".claude/skills",
+      "detect": {
+        "env_any": ["CLAUDE_CODE", "CLAUDECODE"],
+        "process_names": ["claude", "claude.exe"],
+        "project_markers": [".claude/skills", ".claude/settings.json"]
+      }
+    },
+    "codex": {
+      "label": "Codex",
+      "skill_dir": ".agents/skills",
+      "detect": {
+        "env_any": ["CODEX_MANAGED", "OPENAI_CODEX"],
+        "process_names": ["codex"],
+        "project_markers": [".agents/skills"]
+      }
+    }
+  },
   "skills": [
     {
       "id": "zero-skills",
@@ -7,7 +39,7 @@
         "url": "https://github.com/zeromicro/zero-skills.git",
         "ref": "main"
       },
-      "supported_tools": ["cursor", "codex", "claude-code"],
+      "supported_agents": ["cursor", "codex", "claude-code"],
       "install_global": true,
       "install_project": true,
       "checksum_sha256": null,
@@ -16,16 +48,15 @@
     {
       "id": "feishu-cli",
       "install_commands": [
-        ["npm", "install", "-g", "@larksuite/cli"],
-        ["npx", "-y", "skills", "add", "https://open.feishu.cn", "--skill", "-y"]
+        ["npm", "install", "-g", "@larksuite/cli"]
       ],
       "install_cwd": "~",
       "source_label": "https://open.feishu.cn/document/no_class/mcp-archive/feishu-cli-installation-guide.md",
-      "supported_tools": ["cursor", "codex", "claude-code"],
+      "supported_agents": ["cursor", "codex", "claude-code"],
       "install_global": true,
       "install_project": true,
       "checksum_sha256": null,
-      "notes": "飞书官方 Lark CLI + 平台 Skill。安装后在本机执行：lark-cli config init --new；lark-cli auth login --recommend；lark-cli auth status。文档：https://open.feishu.cn/document/no_class/mcp-archive/feishu-cli-installation-guide.md"
+      "notes": "飞书官方 Lark CLI + 平台 Skill。安装后：lark-cli config init --new；lark-cli auth login --recommend；lark-cli auth status。文档：https://open.feishu.cn/document/no_class/mcp-archive/feishu-cli-installation-guide.md"
     },
     {
       "id": "mysql-mcp-server",
@@ -33,7 +64,7 @@
         ["npm", "install", "-D", "mysql-mcp-server"]
       ],
       "source_label": "https://www.npmjs.com/package/mysql-mcp-server",
-      "supported_tools": ["cursor", "codex", "claude-code"],
+      "supported_agents": ["cursor", "codex", "claude-code"],
       "install_global": false,
       "install_project": true,
       "checksum_sha256": null,
@@ -42,7 +73,7 @@
     {
       "id": "mysql-cli",
       "source_label": "https://dev.mysql.com/doc/refman/8.4/en/mysql.html; https://dev.mysql.com/doc/mysql-shell/8.4/en/",
-      "supported_tools": ["cursor", "codex", "claude-code"],
+      "supported_agents": ["cursor", "codex", "claude-code"],
       "install_global": false,
       "install_project": true,
       "checksum_sha256": null,

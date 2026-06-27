@@ -8,13 +8,12 @@ Official docs: [Feishu CLI installation guide](https://open.feishu.cn/document/n
 
 - Node.js (npm / npx)
 
-## Step 1: Install
+## Step 1: Install CLI
 
 Run in the project or user home (ask before global install):
 
 ```shell
 npm install -g @larksuite/cli
-npx -y skills add https://open.feishu.cn --skill -y
 ```
 
 If `npm install -g` fails with permission errors:
@@ -27,7 +26,19 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 Verify: `lark-cli --version`
 
-## Step 2: Configure app credentials
+## Step 2: Install platform skills (Feishu `skills` CLI)
+
+Feishu distributes skills via the [`skills`](https://skills.sh/) CLI. **This tool is Feishu-specific** — other registry entries do not use it.
+
+Replace `<agent>` with the detected Agent id from `registry/skills.json` → `agents` (e.g. `cursor`, `claude-code`, `codex`):
+
+```shell
+npx -y skills add https://open.feishu.cn --agent <agent> -y
+```
+
+> **Important:** `--agent` is required for this CLI. Omitting it installs to every supported Agent (~50 project directories).
+
+## Step 3: Configure app credentials
 
 The user runs this in their terminal (browser required). The Agent may help interpret the output:
 
@@ -35,7 +46,7 @@ The user runs this in their terminal (browser required). The Agent may help inte
 lark-cli config init --new
 ```
 
-## Step 3: Login
+## Step 4: Login
 
 The user runs this in their terminal. The Agent may extract the auth link and send it to the user:
 
@@ -43,10 +54,11 @@ The user runs this in their terminal. The Agent may extract the auth link and se
 lark-cli auth login --recommend
 ```
 
-## Step 4: Verify
+## Step 5: Verify
 
 ```shell
 lark-cli auth status
+npx skills ls -a <agent>
 ```
 
 ## Claude Code (optional)
@@ -63,4 +75,4 @@ To reduce permission prompts, merge into `.claude/settings.json` (project) or `~
 npm update -g @larksuite/cli
 ```
 
-Re-run the `npx skills add ...` command if Feishu updates the platform skill.
+Re-run Step 2 if Feishu updates the platform skill.

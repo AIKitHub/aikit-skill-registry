@@ -31,7 +31,7 @@ MYSQL_DATABASE=app_db
 
 ## Step 3: Add MCP configuration
 
-Add to your host's MCP config (Cursor / Codex / Claude Code):
+Add to your Agent's MCP config (Cursor / Codex / Claude Code):
 
 ```json
 {
@@ -51,7 +51,7 @@ Add to your host's MCP config (Cursor / Codex / Claude Code):
 }
 ```
 
-Replace `${MYSQL_PASSWORD}` with your host's env-var syntax if different.
+Replace `${MYSQL_PASSWORD}` with your Agent platform's env-var syntax if different.
 
 ## Step 4: Verify
 

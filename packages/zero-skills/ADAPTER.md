@@ -6,7 +6,7 @@ Upstream usage: see upstream `SKILL.md` and `getting-started/` guides.
 
 ## Step 1: Install
 
-Clone into the skill directory for your host:
+Clone into the skill directory for the detected Agent (see `agents` → `skill_dir` in `registry/skills.json`):
 
 ```shell
 # Cursor
@@ -32,7 +32,7 @@ Use branch `main` unless you need a specific version.
 Pull the latest upstream content in the installed directory:
 
 ```shell
-git -C .cursor/skills/zero-skills pull   # adjust path for your host
+git -C .cursor/skills/zero-skills pull   # adjust path to your Agent's skill_dir
 ```
 
 Ask the user before upgrading if the directory has local changes.
