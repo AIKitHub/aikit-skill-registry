@@ -1,0 +1,22 @@
+# Secrets and local credentials — never commit these
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local install artifacts (consumers may run npm install when testing entries)
+node_modules/
+npm-debug.log*
+yarn-error.log*

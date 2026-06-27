@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "id": "zero-skills",
+      "git": {
+        "url": "https://github.com/zeromicro/zero-skills.git",
+        "ref": "main"
+      },
+      "supported_tools": ["cursor", "codex", "claude-code"],
+      "install_global": true,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Official go-zero Agent Skill (zeromicro/zero-skills). AI uses goctl from the terminal per upstream SKILL.md / getting-started guides."
+    },
+    {
+      "id": "feishu-cli",
+      "install_commands": [
+        ["npm", "install", "-g", "@larksuite/cli"],
+        ["npx", "-y", "skills", "add", "https://open.feishu.cn", "--skill", "-y"]
+      ],
+      "install_cwd": "~",
+      "source_label": "https://open.feishu.cn/document/no_class/mcp-archive/feishu-cli-installation-guide.md",
+      "supported_tools": ["cursor", "codex", "claude-code"],
+      "install_global": true,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "飞书官方 Lark CLI + 平台 Skill。安装后在本机执行：lark-cli config init --new；lark-cli auth login --recommend；lark-cli auth status。文档：https://open.feishu.cn/document/no_class/mcp-archive/feishu-cli-installation-guide.md"
+    },
+    {
+      "id": "mysql-mcp-server",
+      "install_commands": [
+        ["npm", "install", "-D", "mysql-mcp-server"]
+      ],
+      "source_label": "https://www.npmjs.com/package/mysql-mcp-server",
+      "supported_tools": ["cursor", "codex", "claude-code"],
+      "install_global": false,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Community read-only MySQL MCP server (dpflucas/mysql-mcp-server), not an Oracle/MySQL official MCP. Requires project MCP configuration with MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, and optional MYSQL_DATABASE. Use a least-privilege read-only MySQL account. Prefer mysql-cli for authoritative MySQL operations."
+    },
+    {
+      "id": "mysql-cli",
+      "source_label": "https://dev.mysql.com/doc/refman/8.4/en/mysql.html; https://dev.mysql.com/doc/mysql-shell/8.4/en/",
+      "supported_tools": ["cursor", "codex", "claude-code"],
+      "install_global": false,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Authoritative MySQL CLI option based on Oracle/MySQL official clients: mysql command-line client and mysqlsh MySQL Shell. No automatic install command is registered because installation differs by OS/package manager. Agents should detect mysql/mysqlsh first, then ask before installing system packages."
+    }
+  ]
+}
