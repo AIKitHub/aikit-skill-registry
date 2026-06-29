@@ -104,7 +104,7 @@
       "install_global": false,
       "install_project": true,
       "checksum_sha256": null,
-      "notes": "Local-first Postman integration route for agent-managed API collections, environments, tests, and integration runs. Prefer repository-local collection/environment files imported into the Postman desktop app, with Postman CLI for local execution and Newman for v2.1 JSON collections. Use Postman MCP Server or Postman API only when cloud workspace CRUD/sync is explicitly required; POSTMAN_API_KEY is not required for the local-first path."
+      "notes": "Local-first Postman integration route for agent-managed API collections, environments, tests, and integration runs. Prefer repository-local .ai/postman/collection.json and .ai/postman/environment.local.json imported into the Postman desktop app, with Postman CLI for local execution and Newman for v2.1 JSON collections. Use Postman MCP Server or Postman API only when cloud workspace CRUD/sync is explicitly required; POSTMAN_API_KEY is not required for the local-first path."
     }
   ]
 }

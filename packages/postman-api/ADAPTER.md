@@ -1,6 +1,6 @@
 # postman-api integration guide
 
-Use Postman's official local-first surfaces for API collection management and integration test execution. Prefer repository-local Postman collection and environment files, then import them into the Postman desktop app for human debugging. Use Postman cloud, MCP, or the Postman API only when workspace synchronization or cloud-managed CRUD is explicitly required.
+Use Postman's official local-first surfaces for API collection management and integration test execution. Prefer repository-local Postman collection and environment files under `.ai/postman/`, then import them into the Postman desktop app for human debugging. Use Postman cloud, MCP, or the Postman API only when workspace synchronization or cloud-managed CRUD is explicitly required.
 
 Official references:
 
@@ -27,7 +27,7 @@ Decision: the registry entry should be treated as a local-first Postman adapter.
 
 | Need | Preferred path | Fallback path |
 | ---- | -------------- | ------------- |
-| Agent-managed collections, requests, tests, environments | Repository-local collection/environment files | Postman MCP Server or Postman API |
+| Agent-managed collections, requests, tests, environments | Repository-local `.ai/postman/` collection/environment files | Postman MCP Server or Postman API |
 | CRUD for collections and environments | Edit local JSON/YAML, then import into Postman desktop | Postman API for cloud workspace CRUD |
 | Generate or update Tests / pre-request scripts | Update local collection files | Postman MCP Server or Postman API update collection payloads |
 | Execute integration tests | Postman CLI with local files | Newman for v2.1 JSON collections |
@@ -46,12 +46,20 @@ Do not commit API keys, workspace IDs, environment secrets, exported production 
 
 ## Local-first setup
 
-Keep generated artifacts under a project-controlled directory such as `postman/`:
+Keep generated artifacts under the project-controlled `.ai/postman/` directory. The agent may create this directory before generating or updating Postman artifacts.
 
 ```text
-postman/
+.ai/postman/
   collection.json
   environment.local.json
+```
+
+Create the directory and placeholder files when they do not exist:
+
+```powershell
+New-Item -ItemType Directory -Force .ai/postman | Out-Null
+if (-not (Test-Path .ai/postman/collection.json)) { Set-Content .ai/postman/collection.json '{ "info": { "name": "Local API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" }, "item": [] }' }
+if (-not (Test-Path .ai/postman/environment.local.json)) { Set-Content .ai/postman/environment.local.json '{ "name": "local", "values": [] }' }
 ```
 
 Detect the local tools before choosing the exact workflow:
@@ -65,7 +73,7 @@ Test-Path "$env:LOCALAPPDATA\Postman\Postman.exe"
 
 Workflow:
 
-1. Generate or update the collection/environment files in the repository.
+1. Generate or update `.ai/postman/collection.json` and `.ai/postman/environment.local.json` in the repository.
 2. Import those files into the Postman desktop app for manual debugging.
 3. If a human edits them in Postman desktop, export the collection/environment JSON and replace the repository files.
 4. Run verification locally with Postman CLI or Newman when one is installed. If only the desktop app is available, use Postman's local runner manually and record the result.
@@ -109,8 +117,8 @@ postman collection run <collection-id-or-file> \
 or:
 
 ```shell
-npx newman run ./postman/collection.json \
-  --environment ./postman/environment.json \
+npx newman run ./.ai/postman/collection.json \
+  --environment ./.ai/postman/environment.local.json \
   --reporters cli,json \
   --reporter-json-export ./.ai/context/verification/postman-newman-report.json
 ```
@@ -121,7 +129,7 @@ Postman CLI is the first choice for local-first automated verification, especial
 
 1. Discover API contracts from `.ai/context`, OpenAPI files, REST/RPC docs, or source routes.
 2. Build an integration scenario graph: setup, auth, create/read/update/delete, cross-module assertions, cleanup, and negative paths.
-3. Create or update repository-local Postman collection/environment files with folders per scenario and requests ordered by data dependency.
+3. Create or update `.ai/postman/collection.json` and `.ai/postman/environment.local.json` with folders per scenario and requests ordered by data dependency.
 4. Attach Tests scripts that assert status, schema, required business fields, error codes, side effects, and variables passed to later requests.
 5. Create or update a non-production environment with base URLs and generated test data placeholders.
 6. Run the collection once locally with Postman CLI or Newman.
