@@ -99,12 +99,12 @@
     },
     {
       "id": "postman-api",
-      "source_label": "https://learning.postman.com/docs/reference/vs-code-extension/postman-mcp-server/; https://learning.postman.com/docs/developer/postman-api/intro-api/; https://learning.postman.com/docs/postman-cli/postman-cli-overview/; https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/",
+      "source_label": "https://learning.postman.com/docs/reference/vs-code-extension/postman-mcp-server/; https://learning.postman.com/docs/developer/postman-api/intro-api/; https://learning.postman.com/docs/postman-cli/postman-cli-overview/; https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/; https://learning.postman.com/docs/getting-started/importing-and-exporting/exporting-data/; https://learning.postman.com/docs/getting-started/installation/install-app/",
       "supported_agents": ["cursor", "codex", "claude-code"],
       "install_global": false,
       "install_project": true,
       "checksum_sha256": null,
-      "notes": "Official Postman integration route for agent-managed API collections, environments, tests, and integration runs. Prefer Postman MCP Server when available; fall back to Postman API for CRUD and Postman CLI or Newman for local/CI execution. Requires POSTMAN_API_KEY and non-production workspaces/environments by default."
+      "notes": "Local-first Postman integration route for agent-managed API collections, environments, tests, and integration runs. Prefer repository-local collection/environment files imported into the Postman desktop app, with Postman CLI for local execution and Newman for v2.1 JSON collections. Use Postman MCP Server or Postman API only when cloud workspace CRUD/sync is explicitly required; POSTMAN_API_KEY is not required for the local-first path."
     }
   ]
 }
