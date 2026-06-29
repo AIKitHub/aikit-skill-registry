@@ -50,6 +50,7 @@ Keep generated artifacts under the project-controlled `.ai/postman/` directory. 
 
 ```text
 .ai/postman/
+  scenarios.yaml
   collection.json
   environment.local.json
 ```
@@ -58,6 +59,7 @@ Create the directory and placeholder files when they do not exist:
 
 ```powershell
 New-Item -ItemType Directory -Force .ai/postman | Out-Null
+if (-not (Test-Path .ai/postman/scenarios.yaml)) { Set-Content .ai/postman/scenarios.yaml "scenarios:`n  - name: local-smoke`n    steps: []`n" }
 if (-not (Test-Path .ai/postman/collection.json)) { Set-Content .ai/postman/collection.json '{ "info": { "name": "Local API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" }, "item": [] }' }
 if (-not (Test-Path .ai/postman/environment.local.json)) { Set-Content .ai/postman/environment.local.json '{ "name": "local", "values": [] }' }
 ```
@@ -73,11 +75,58 @@ Test-Path "$env:LOCALAPPDATA\Postman\Postman.exe"
 
 Workflow:
 
-1. Generate or update `.ai/postman/collection.json` and `.ai/postman/environment.local.json` in the repository.
-2. Import those files into the Postman desktop app for manual debugging.
-3. If a human edits them in Postman desktop, export the collection/environment JSON and replace the repository files.
-4. Run verification locally with Postman CLI or Newman when one is installed. If only the desktop app is available, use Postman's local runner manually and record the result.
-5. Commit only sanitized collection/environment files. Do not commit local secrets or run reports containing tokens.
+1. Generate or update `.ai/postman/scenarios.yaml` as the machine-readable scenario graph.
+2. Compile or synchronize that graph into `.ai/postman/collection.json` and `.ai/postman/environment.local.json`.
+3. Import those files into the Postman desktop app for manual debugging and visual inspection.
+4. If a human edits them in Postman desktop, export the collection/environment JSON and replace the repository files.
+5. Run verification locally with Postman CLI or Newman when one is installed. If only the desktop app is available, use Postman's local runner manually and record the result.
+6. Commit only sanitized scenario, collection, and environment files. Do not commit local secrets or run reports containing tokens.
+
+## Scenario graph
+
+Use `.ai/postman/scenarios.yaml` as the LLM-facing workflow layer. The scenario graph should describe business chains, dependencies, variable handoff, negative paths, and cleanup. Postman remains the execution engine; the agent compiles each scenario into ordered folders and requests in `.ai/postman/collection.json`.
+
+Example:
+
+```yaml
+scenarios:
+  - name: user-device-lifecycle
+    description: Create a user, attach a device, change status, then clean up.
+    steps:
+      - name: login
+        request: POST /auth/login
+        save:
+          authToken: $.token
+      - name: create-user
+        request: POST /users
+        auth: authToken
+        save:
+          userId: $.id
+      - name: create-device
+        request: POST /devices
+        auth: authToken
+        input:
+          userId: "{{userId}}"
+        save:
+          deviceId: $.id
+      - name: update-device-status
+        request: PATCH /devices/{{deviceId}}/status
+        auth: authToken
+      - name: cleanup-user
+        request: DELETE /users/{{userId}}
+        auth: authToken
+        cleanup: true
+```
+
+Compilation rules:
+
+- Create one Postman folder per scenario, preserving step order.
+- Use Pre-request scripts for dynamic test data, timestamps, UUIDs, and request-local setup.
+- Use Tests scripts to assert response status/schema/business fields and save variables for later steps with `pm.environment.set`.
+- Prefer linear execution and variable handoff for normal integration flows.
+- Use `postman.setNextRequest("request name")` only for simple conditional branches, such as skipping cleanup after setup failure or jumping to a negative assertion path.
+- Keep complex DAGs, parallel execution, long waits, retries, and cross-collection orchestration in an outer script or CI layer, not in the Postman collection itself.
+- Ensure the generated collection can be imported into the Postman desktop app so humans can visually inspect folders, request order, variables, and Tests scripts.
 
 ## MCP setup
 
@@ -128,12 +177,12 @@ Postman CLI is the first choice for local-first automated verification, especial
 ## Agent workflow
 
 1. Discover API contracts from `.ai/context`, OpenAPI files, REST/RPC docs, or source routes.
-2. Build an integration scenario graph: setup, auth, create/read/update/delete, cross-module assertions, cleanup, and negative paths.
-3. Create or update `.ai/postman/collection.json` and `.ai/postman/environment.local.json` with folders per scenario and requests ordered by data dependency.
+2. Build or update `.ai/postman/scenarios.yaml`: setup, auth, create/read/update/delete, cross-module assertions, cleanup, negative paths, and any simple branch rules.
+3. Compile scenarios into `.ai/postman/collection.json` with folders per scenario and requests ordered by data dependency.
 4. Attach Tests scripts that assert status, schema, required business fields, error codes, side effects, and variables passed to later requests.
-5. Create or update a non-production environment with base URLs and generated test data placeholders.
+5. Create or update `.ai/postman/environment.local.json` with non-production base URLs and generated test data placeholders.
 6. Run the collection once locally with Postman CLI or Newman.
-7. If failures are caused by generated tests or stale assumptions, adjust the collection/tests and rerun. If failures indicate product defects, stop and record evidence.
+7. If failures are caused by generated tests or stale assumptions, adjust the scenario graph, collection/tests, and rerun. If failures indicate product defects, stop and record evidence.
 8. Store verification evidence in `.ai/context/**/verification.md` or an equivalent verification record.
 
 ## Safety constraints
