@@ -78,6 +78,33 @@
       "install_project": true,
       "checksum_sha256": null,
       "notes": "Authoritative MySQL CLI option based on Oracle/MySQL official clients: mysql command-line client and mysqlsh MySQL Shell. No automatic install command is registered because installation differs by OS/package manager. Agents should detect mysql/mysqlsh first, then ask before installing system packages."
+    },
+    {
+      "id": "postgres-cli",
+      "source_label": "https://www.postgresql.org/docs/current/app-psql.html",
+      "supported_agents": ["cursor", "codex", "claude-code"],
+      "install_global": false,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Authoritative PostgreSQL CLI option based on the official psql interactive terminal. No automatic install command is registered because installation differs by OS/package manager. Agents should detect psql first, then ask before installing system packages."
+    },
+    {
+      "id": "neon-postgres",
+      "source_label": "https://neon.com/docs/ai/neon-mcp-server; https://neon.com/docs/ai/agent-skills",
+      "supported_agents": ["cursor", "codex", "claude-code"],
+      "install_global": false,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Official Neon Postgres Agent integration. neonctl init configures Neon MCP and installs project-level Agent Skills where supported. Neon also provides Cursor, Claude Code, and Codex plugin paths. Requires Neon OAuth/API auth and should be scoped to development projects or branches."
+    },
+    {
+      "id": "postman-api",
+      "source_label": "https://learning.postman.com/docs/reference/vs-code-extension/postman-mcp-server/; https://learning.postman.com/docs/developer/postman-api/intro-api/; https://learning.postman.com/docs/postman-cli/postman-cli-overview/; https://learning.postman.com/docs/collections/using-newman-cli/command-line-integration-with-newman/",
+      "supported_agents": ["cursor", "codex", "claude-code"],
+      "install_global": false,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Official Postman integration route for agent-managed API collections, environments, tests, and integration runs. Prefer Postman MCP Server when available; fall back to Postman API for CRUD and Postman CLI or Newman for local/CI execution. Requires POSTMAN_API_KEY and non-production workspaces/environments by default."
     }
   ]
 }
