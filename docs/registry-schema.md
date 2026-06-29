@@ -79,7 +79,7 @@ Agent install flow: [install.md](install.md). Per-skill commands in ADAPTER.md.
 | `install_commands` | string[][] | yes* | Commands run in order |
 | `install_cwd` | string | no | Working directory (`~` = home) |
 
-\* Required when `git` is absent.
+\* Required when `git` is absent and installation can be safely expressed as deterministic commands. Adapter-only entries such as official system CLIs may omit both `git` and `install_commands`; their `packages/<id>/ADAPTER.md` must provide detection, manual install guidance, and safety constraints.
 
 ## Project install paths
 
