@@ -105,6 +105,15 @@
       "install_project": true,
       "checksum_sha256": null,
       "notes": "Local-first Postman integration route for agent-managed API collections, environments, tests, and integration runs. Prefer repository-local .ai/postman/scenarios.yaml as the LLM-facing workflow graph, compiled into .ai/postman/collection.json and .ai/postman/environment.local.json for Postman desktop import, local Postman CLI execution, or Newman v2.1 JSON runs. Use Postman MCP Server or Postman API only when cloud workspace CRUD/sync is explicitly required; POSTMAN_API_KEY is not required for the local-first path."
+    },
+    {
+      "id": "routerbase-agent-skills",
+      "source_label": "https://github.com/zenlee123/routerbase-agent-skills; https://routerbase.com/",
+      "supported_agents": ["cursor", "codex", "claude-code"],
+      "install_global": false,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Three community skills for using [routerbase](https://routerbase.com/) as an OpenAI-compatible AI gateway: API integration, model routing, and media generation. The upstream repository contains only skill instructions and placeholders; users must supply their own RouterBase API key locally."
     }
   ]
 }
