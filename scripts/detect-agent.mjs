@@ -16,8 +16,15 @@ const registry = JSON.parse(
 );
 
 const projectArg = process.argv.indexOf("--project");
+const projectValue = projectArg === -1 ? undefined : process.argv[projectArg + 1];
+
+if (projectArg !== -1 && (!projectValue || projectValue.startsWith("--"))) {
+  process.stderr.write("Usage: node scripts/detect-agent.mjs [--project <dir>]\n");
+  process.exit(2);
+}
+
 const projectDir = resolve(
-  projectArg !== -1 ? process.argv[projectArg + 1] : process.cwd()
+  projectValue ?? process.cwd()
 );
 
 function envHit(keys) {
