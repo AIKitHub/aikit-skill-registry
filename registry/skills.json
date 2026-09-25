@@ -114,6 +114,16 @@
       "install_project": true,
       "checksum_sha256": null,
       "notes": "Three community skills for using [routerbase](https://routerbase.com/) as an OpenAI-compatible AI gateway: API integration, model routing, and media generation. The upstream repository contains only skill instructions and placeholders; users must supply their own RouterBase API key locally."
+    },
+    {
+      "id": "yylo-skills",
+      "git": { "url": "https://github.com/yylo-dev/yylo-skills.git", "ref": "main" },
+      "source_label": "https://github.com/yylo-dev/yylo-skills; https://yylo.dev",
+      "supported_agents": ["cursor", "codex", "claude-code"],
+      "install_global": true,
+      "install_project": true,
+      "checksum_sha256": null,
+      "notes": "Eight community agent skills maintained by YYLO for task and workflow management on coding-agent projects (ledger tasks, planning, Ralph loop, project understanding, wiki, artifacts, workflows, benchmark guidance). Upstream ships SKILL.md instruction bundles and helper scripts only; review scripts before installing. No credentials required."
     }
   ]
 }
